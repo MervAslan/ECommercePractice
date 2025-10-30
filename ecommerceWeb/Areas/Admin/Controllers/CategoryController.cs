@@ -4,17 +4,18 @@ using ecommerce.DataAccess.Repository.IRepository;
 using ecommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ecommerceWeb.Controllers
+namespace ecommerceWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository categoryRepository;
-        public CategoryController(ICategoryRepository db) { //DI sayesinde manuel nesne oluşturmamıza gerek yok
-            categoryRepository = db;
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork) { //DI sayesinde manuel nesne oluşturmamıza gerek yok
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> objCategoryList = categoryRepository.GetAll().ToList();
+            List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
             return View(objCategoryList); //viewda listenecek
         }
         
@@ -30,8 +31,8 @@ namespace ecommerceWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                categoryRepository.Add(obj);
-                categoryRepository.Save();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category created successfully"; 
                 return RedirectToAction("Index"); // kaydettikten sonra liste sayfasına yönlendirir
             }
@@ -47,7 +48,7 @@ namespace ecommerceWeb.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = categoryRepository.Get(u => u.CategoryId == id);
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.CategoryId == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -64,8 +65,8 @@ namespace ecommerceWeb.Controllers
            
             if (ModelState.IsValid)
             {
-                categoryRepository.Update(obj);
-                categoryRepository.Save();
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index"); // kaydettikten sonra liste sayfasına yönlendirir
             }
@@ -78,7 +79,7 @@ namespace ecommerceWeb.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = categoryRepository.Get(u => u.CategoryId == id);
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.CategoryId == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -92,13 +93,13 @@ namespace ecommerceWeb.Controllers
         [HttpPost,ActionName("Delete")] 
         public IActionResult DeletePOST(int? id) //get metodu ile aynı isme sahip olamaz bu yüzden actionname ile ismi eşleştiriyoruz
         {
-            Category? obj = categoryRepository.Get(u => u.CategoryId == id);
+            Category? obj = _unitOfWork.Category.Get(u => u.CategoryId == id);
             if(obj == null)
             {
                 return NotFound();
             }
-            categoryRepository.Remove(obj);
-            categoryRepository.Save();
+            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index"); //Kaydettikten sonra liste sayfasına yönlendirir.
             
