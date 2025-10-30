@@ -1,4 +1,6 @@
-using ecommerceWeb.Data;
+using ecommerce.DataAccess.Data;
+using ecommerce.DataAccess.Repository;
+using ecommerce.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); //projede applicationdbcontext ihtiyacý olursa bana söyle ben sana hazýr instance veiririm diyor.
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 
 

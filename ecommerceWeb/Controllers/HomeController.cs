@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using ecommerceWeb.Models;
+using ecommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerceWeb.Controllers
