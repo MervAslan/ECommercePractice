@@ -19,7 +19,7 @@ namespace ecommerce.Models
         [Required]
         public string ISBN { get; set; }
         [Required]
-        public int Author { get; set; }
+        public string Author { get; set; }
         [Required]
         [Display(Name="List Price")]
         [Range(1,1000)]
