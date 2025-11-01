@@ -15,8 +15,10 @@ namespace ecommerce.DataAccess.Repository
         public ProductRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
+        
         }
-        void Update(Product obj)
+
+        public void Update(Product obj)
         {
             _db.Products.Update(obj);
         }
