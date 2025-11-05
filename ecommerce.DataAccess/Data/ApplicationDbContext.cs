@@ -21,7 +21,7 @@
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
-                    Id = 1,
+                    ProductId = 1,
                     Title = "Fortune of Time",
                     Author = "Billy Spark",
                     Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
@@ -33,7 +33,7 @@
                 },
                 new Product
                 {
-                    Id = 2,
+                    ProductId = 2,
                     Title = "Dark Skies",
                     Author = "Nancy Hoover",
                     Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
@@ -45,7 +45,7 @@
                 },
                 new Product
                 {
-                    Id = 3,
+                    ProductId = 3,
                     Title = "Vanish in the Sunset",
                     Author = "Julian Button",
                     Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
@@ -57,7 +57,7 @@
                 },
                 new Product
                 {
-                    Id = 4,
+                    ProductId = 4,
                     Title = "Cotton Candy",
                     Author = "Abby Muscles",
                     Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
@@ -69,7 +69,7 @@
                 },
                 new Product
                 {
-                    Id = 5,
+                    ProductId = 5,
                     Title = "Rock in the Ocean",
                     Author = "Ron Parker",
                     Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
@@ -81,7 +81,7 @@
                 },
                 new Product
                 {
-                    Id = 6,
+                    ProductId = 6,
                     Title = "Leaves and Wonders",
                     Author = "Laura Phantom",
                     Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
