@@ -22,7 +22,7 @@ namespace ecommerceWeb.Areas.Admin.Controllers
             return View(objProductList); //viewda listenecek
         }
         
-        public IActionResult Create() 
+        public IActionResult Upsert(int? id) //update-insert işlemini tek çatı altında topladık
         {
             ProductVM productVM = new()
             {
@@ -34,10 +34,21 @@ namespace ecommerceWeb.Areas.Admin.Controllers
                 Product = new Product()
 
             };
-            return View(productVM);
+            if(id== null || id == 0)
+            {
+                //insert
+                return View(productVM);
+            }
+            else
+            {
+                //update
+                productVM.Product = _unitOfWork.Product.Get(u => u.ProductId == id);
+                return View(productVM);
+            }
+            
         }
         [HttpPost]
-        public IActionResult Create(ProductVM productVM)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
            
             if (ModelState.IsValid)
@@ -61,37 +72,7 @@ namespace ecommerceWeb.Areas.Admin.Controllers
            
         }
         
-        public IActionResult Edit(int? id) // get isteğidir kategori verisini form alanlarına doldururuz
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? productFromDb = _unitOfWork.Product.Get(u => u.ProductId == id);
-            if (productFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(productFromDb); //kategori bulunduysa bu kategori nesnesi edit viewına gönderilir
-
-
-
-        }
-
-        [HttpPost] // kullanıcıdan gelen form verilerini alıp işliyoruz
-        public IActionResult Edit(Product obj)
-        {
-           
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(obj);
-                _unitOfWork.Save();
-                TempData["success"] = "Product updated successfully";
-                return RedirectToAction("Index"); // kaydettikten sonra liste sayfasına yönlendirir
-            }
-            return View();
-
-        }
+        
         public IActionResult Delete(int? id) // kategori verisini form alanlarına dolduruyoruz
         {
             if (id == null || id == 0)
