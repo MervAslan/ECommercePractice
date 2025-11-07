@@ -2,6 +2,7 @@
 using ecommerce.DataAccess.Data;
 using ecommerce.DataAccess.Repository.IRepository;
 using ecommerce.Models;
+using ecommerce.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -23,27 +24,39 @@ namespace ecommerceWeb.Areas.Admin.Controllers
         
         public IActionResult Create() 
         {
-            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+            ProductVM productVM = new()
             {
-                Text = i.Name,
-                Value = i.CategoryId.ToString()
-            });
-            ViewBag.CategoryList = CategoryList;
-            return View();
+                CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.CategoryId.ToString()
+                }),
+                Product = new Product()
+
+            };
+            return View(productVM);
         }
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM productVM)
         {
            
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully"; 
                 return RedirectToAction("Index"); // kaydettikten sonra liste sayfasına yönlendirir
             }
-            return View();
-                
+            else
+            {
+                productVM.CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.CategoryId.ToString()
+                });
+                return View(productVM);
+            }
+            
 
            
         }
