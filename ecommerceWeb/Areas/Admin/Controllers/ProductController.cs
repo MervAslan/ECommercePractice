@@ -12,8 +12,11 @@ namespace ecommerceWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork) { //DI sayesinde manuel nesne oluşturmamıza gerek yok
+        private readonly IWebHostEnvironment _webhostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webhostEnvironment)
+        { 
             _unitOfWork = unitOfWork;
+            _webhostEnvironment = webhostEnvironment;
         }
         public IActionResult Index()
         {
@@ -53,6 +56,19 @@ namespace ecommerceWeb.Areas.Admin.Controllers
            
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webhostEnvironment.WebRootPath;
+                if(file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //random filename verir
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
+                }
+
                 _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully"; 
