@@ -20,7 +20,7 @@ namespace ecommerceWeb.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
             
             return View(objProductList); //viewda listenecek
         }
@@ -61,6 +61,16 @@ namespace ecommerceWeb.Areas.Admin.Controllers
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //random filename verir
                     string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    if(!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    {
+                        //eski image i sil
+                        var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -68,10 +78,19 @@ namespace ecommerceWeb.Areas.Admin.Controllers
 
                     productVM.Product.ImageUrl = @"\images\product\" + fileName;
                 }
-
-                _unitOfWork.Product.Add(productVM.Product);
+                if(productVM.Product.ProductId == 0)
+                {
+                    _unitOfWork.Product.Add(productVM.Product); //yeni ürün ekleme
+                    TempData["success"] = "Product created successfully";
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(productVM.Product); //var olan ürünü güncelleme
+                    TempData["success"] = "Product updated successfully";
+                }
+               
                 _unitOfWork.Save();
-                TempData["success"] = "Product created successfully"; 
+                
                 return RedirectToAction("Index"); // kaydettikten sonra liste sayfasına yönlendirir
             }
             else

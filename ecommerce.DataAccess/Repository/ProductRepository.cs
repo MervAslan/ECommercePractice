@@ -20,7 +20,27 @@ namespace ecommerce.DataAccess.Repository
 
         public void Update(Product obj)
         {
-            _db.Products.Update(obj);
+            var objFromDb = _db.Products.FirstOrDefault(u => u.ProductId == obj.ProductId); //image url bazen boş gelebilir efde bunu görünce
+                                                                                            //güncelleme yaparken ımageurl null geldi o zaman veri tabanındaki image url i de null yapayım 
+                                                                                            //eğer yeni resim yüklendiyse güncelle yüklenmediyse dokunma
+            if (objFromDb != null)
+            {
+                objFromDb.Title = obj.Title;
+                objFromDb.Description = obj.Description;
+                objFromDb.ISBN = obj.ISBN;
+                objFromDb.Author = obj.Author;
+                objFromDb.ListPrice = obj.ListPrice;
+                objFromDb.Price = obj.Price;
+                objFromDb.Price50 = obj.Price50;
+                objFromDb.Price100 = obj.Price100;
+                objFromDb.CategoryId = obj.CategoryId;
+                if (obj.ImageUrl != null)
+                {
+                    objFromDb.ImageUrl = obj.ImageUrl;
+
+
+                }
+            }
         }
     }
 }
