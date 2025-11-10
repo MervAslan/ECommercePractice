@@ -106,25 +106,7 @@ namespace ecommerceWeb.Areas.Admin.Controllers
 
            
         }
-        
-        
-        public IActionResult Delete(int? id) // kategori verisini form alanlarına dolduruyoruz
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? categoryFromDb = _unitOfWork.Product.Get(u => u.ProductId == id);
-            if (categoryFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(categoryFromDb); //kategori bulunduysa bu kategori nesnesi delete viewına gönderilir
-
-
-
-        }
-
+       
         [HttpPost,ActionName("Delete")] 
         public IActionResult DeletePOST(int? id) //get metodu ile aynı isme sahip olamaz bu yüzden actionname ile ismi eşleştiriyoruz
         {
@@ -141,6 +123,33 @@ namespace ecommerceWeb.Areas.Admin.Controllers
             
 
         }
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll() 
+        {
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            return Json(new { data = objProductList });
+        }
+        [HttpDelete]
+        public IActionResult Delete(int? id)
+        {
+            var productToBeDeleted = _unitOfWork.Product.Get(u => u.ProductId == id);
+            if(productToBeDeleted == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            var oldImagePath = Path.Combine(_webhostEnvironment.WebRootPath, productToBeDeleted.ImageUrl.TrimStart('\\'));
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+            _unitOfWork.Product.Remove(productToBeDeleted);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Delete Successful" });
+
+        }
+        #endregion
 
     }
 }

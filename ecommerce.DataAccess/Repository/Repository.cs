@@ -13,7 +13,7 @@ namespace ecommerce.DataAccess.Repository
         {
             _db = db;
             this.dbSet = _db.Set<T>();
-            _db.Products.Include(u=> u.Category);
+            _db.Products.Include(u=> u.Category); //product ile category i join et(product gelir+ category de gelir)
 
         }
         public void Add(T entity)
