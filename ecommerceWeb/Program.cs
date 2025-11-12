@@ -2,13 +2,16 @@ using ecommerce.DataAccess.Data;
 using ecommerce.DataAccess.Repository;
 using ecommerce.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); //projede applicationdbcontext ihtiyacý olursa bana söyle ben sana hazýr instance veiririm diyor.
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); //projede applicationdbcontext ihtiyacï¿½ olursa bana sï¿½yle ben sana hazï¿½r instance veiririm diyor.
+
+builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
@@ -27,6 +30,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
