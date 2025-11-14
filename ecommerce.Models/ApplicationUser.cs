@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ecommerce.Models
 {
-    public class ApplicationUser :IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         [Required]
         public int Name { get; set; }
