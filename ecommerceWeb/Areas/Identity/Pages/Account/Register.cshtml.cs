@@ -185,6 +185,11 @@ namespace ecommerceWeb.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            Input.RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+            {
+                Text =i,
+                Value=i
+            });
 
             // If we got this far, something failed, redisplay form
             return Page();
