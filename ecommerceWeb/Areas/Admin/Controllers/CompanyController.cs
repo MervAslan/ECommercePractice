@@ -1,5 +1,4 @@
-﻿
-using ecommerce.DataAccess.Data;
+﻿using ecommerce.DataAccess.Data;
 using ecommerce.DataAccess.Repository.IRepository;
 using ecommerce.Models;
 using ecommerce.Models.ViewModels;
@@ -11,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace ecommerceWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
+    //[Authorize(Roles = SD.Role_Admin)]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -30,13 +29,10 @@ namespace ecommerceWeb.Areas.Admin.Controllers
         
         public IActionResult Upsert(int? id) //update-insert işlemini tek çatı altında topladık
         {
-            
-           
             if(id== null || id == 0)
             {
                 //insert
-                return View(new Company);
-
+                return View(new Company());
             }
             else
             {
@@ -78,22 +74,22 @@ namespace ecommerceWeb.Areas.Admin.Controllers
            
         }
        
-        [HttpPost,ActionName("Delete")] 
-        public IActionResult DeletePOST(int? id) //get metodu ile aynı isme sahip olamaz bu yüzden actionname ile ismi eşleştiriyoruz
-        {
-            Company? obj = _unitOfWork.Company.Get(u => u.CompanyId == id);
-            if(obj == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.Company.Remove(obj);
-            _unitOfWork.Save();
-            TempData["success"] = "Company deleted successfully";
-            return RedirectToAction("Index"); //Kaydettikten sonra liste sayfasına yönlendirir.
+        //[HttpPost,ActionName("Delete")] 
+        //public IActionResult DeletePOST(int? id) 
+        //{
+        //    Company? obj = _unitOfWork.Company.Get(u => u.CompanyId == id);
+        //    if(obj == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    _unitOfWork.Company.Remove(obj);
+        //    _unitOfWork.Save();
+        //    TempData["success"] = "Company deleted successfully";
+        //    return RedirectToAction("Index"); 
             
             
 
-        }
+        //}
         #region API CALLS
 
         [HttpGet]
@@ -102,7 +98,7 @@ namespace ecommerceWeb.Areas.Admin.Controllers
             List<Company> objCompanyList = _unitOfWork.Company.GetAll().ToList();
             return Json(new { data = objCompanyList });
         }
-        [HttpDelete]
+        [HttpDelete] //ajax isteğini bu etiket yakalar
         public IActionResult Delete(int? id)
         {
             var CompanyToBeDeleted = _unitOfWork.Company.Get(u => u.CompanyId == id);

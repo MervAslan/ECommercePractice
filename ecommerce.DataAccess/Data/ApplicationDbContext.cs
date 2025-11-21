@@ -23,6 +23,11 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
               new Category { CategoryId = 2, Name = "SciFi", DisplayOrder = 2 },
               new Category { CategoryId = 3, Name = "History", DisplayOrder = 3 }
         );
+        modelBuilder.Entity<Company>().HasData(
+              new Company { CompanyId = 1, Name = "Tech Solution", StreetAddress="123 Tech St.", City="Ankara", PhoneNumber="6666999990000", PostalCode="44090", State="IL"},
+              new Company { CompanyId = 2, Name = "Pegasus", StreetAddress = "123 Pegasus St.", City = "Istanbul", PhoneNumber = "777999990000", PostalCode = "44091", State = "IL" },
+              new Company { CompanyId = 3, Name = "Ephesus", StreetAddress = "123 Ephesus St.", City = "Malatya", PhoneNumber = "8889999900004", PostalCode = "44092", State = "IL" }
+        );
         modelBuilder.Entity<Product>().HasData(
             new Product
             {

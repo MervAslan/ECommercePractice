@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace ecommerceWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
+    //[Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -110,22 +110,22 @@ namespace ecommerceWeb.Areas.Admin.Controllers
            
         }
        
-        [HttpPost,ActionName("Delete")] 
-        public IActionResult DeletePOST(int? id) //get metodu ile aynı isme sahip olamaz bu yüzden actionname ile ismi eşleştiriyoruz
-        {
-            Product? obj = _unitOfWork.Product.Get(u => u.ProductId == id);
-            if(obj == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.Product.Remove(obj);
-            _unitOfWork.Save();
-            TempData["success"] = "Product deleted successfully";
-            return RedirectToAction("Index"); //Kaydettikten sonra liste sayfasına yönlendirir.
+        //[HttpPost,ActionName("Delete")] 
+        //public IActionResult DeletePOST(int? id) 
+        //{
+        //    Product? obj = _unitOfWork.Product.Get(u => u.ProductId == id);
+        //    if(obj == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    _unitOfWork.Product.Remove(obj);
+        //    _unitOfWork.Save();
+        //    TempData["success"] = "Product deleted successfully";
+        //    return RedirectToAction("Index"); //Kaydettikten sonra liste sayfasına yönlendirir.
             
             
 
-        }
+        //}
         #region API CALLS
 
         [HttpGet]
