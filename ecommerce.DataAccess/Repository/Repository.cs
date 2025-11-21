@@ -12,8 +12,8 @@ namespace ecommerce.DataAccess.Repository
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            this.dbSet = _db.Set<T>();
-            _db.Products.Include(u=> u.Category); //product ile category i join et(product gelir+ category de gelir)
+            this.dbSet = _db.Set<T>();  //mesela T product ise dbSet otomatik olarak _db.Products olur
+            _db.Products.Include(u=> u.Category); //product ile category i join et(product gelir + category de gelir)
 
         }
         public void Add(T entity)
@@ -21,7 +21,7 @@ namespace ecommerce.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null) // Get(x=> x.Id == id) 
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null) // Get(x=> x.Id == id) istediğimiz şeye göre filtreleme yapabiliriz(id,name)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
@@ -54,9 +54,9 @@ namespace ecommerce.DataAccess.Repository
            dbSet.Remove(entity);
         }
 
-        public void RemoveRange(IEnumerable<T> entity)
+        public void RemoveRange(IEnumerable<T> entities) //birden fazla ürün silmek için vs. kullanabiliriz
         {
-            dbSet.RemoveRange(entity);
+            dbSet.RemoveRange(entities);
         }
     }
 }
