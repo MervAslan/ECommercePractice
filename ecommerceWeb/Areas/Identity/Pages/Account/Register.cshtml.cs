@@ -170,6 +170,10 @@ namespace ecommerceWeb.Areas.Identity.Pages.Account
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
 
+                if (Input.Role == SD.Role_Company)
+                {
+                    user.CompanyId = Input.CompanyId;
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
