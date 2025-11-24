@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using ecommerce.DataAccess.Repository.IRepository;
 using ecommerce.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerceWeb.Areas.Customer.Controllers
@@ -33,7 +35,31 @@ namespace ecommerceWeb.Areas.Customer.Controllers
            
             return View(shoppingCart);
         }
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+           var claimsIdentity = (ClaimsIdentity)User.Identity; 
+           var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value; // sisteme giriþ yapan kullanýcýyý bulur ve id deðerini çeker
+           shoppingCart.ApplicationUserId = userId;                               // kullanýcý giriþ yapmadýysa [Authorize] attribute u sayesinde otomatik olarak login ekranýna yönlendirir
 
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == shoppingCart.ProductId);
+            if(cartFromDb == null)
+            {
+                cartFromDb.Count+= shoppingCart.Count;
+                _unitOfWork.ShoppingCart.Update(cartFromDb);
+            }
+            else
+            {
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+            }
+
+
+               
+           _unitOfWork.Save();
+           return RedirectToAction(nameof(Index)); // ilerde indexin adýný deðiþirse diye nameof kullanýyoruz böylece hata yapma olasýlýðýmýz azalýr
+
+        }
         public IActionResult Privacy()
         {
             return View();
