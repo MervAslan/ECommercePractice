@@ -21,5 +21,8 @@ namespace ecommerce.Models
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
         public string ApplicationUserId { get; set; }
+
+        [NotMapped]
+        public double Price { get; set; }
     }
 }
