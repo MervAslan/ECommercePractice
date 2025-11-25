@@ -15,7 +15,7 @@ namespace ecommerce.DataAccess.Repository
         {
             _db = db;
             this.dbSet = _db.Set<T>();  //mesela T product ise dbSet otomatik olarak _db.Products olur
-            _db.Products.Include(u=> u.Category); //product ile category i join et(product gelir + category de gelir)
+            
 
         }
         public void Add(T entity)
@@ -47,9 +47,14 @@ namespace ecommerce.DataAccess.Repository
 
         }
 
-        public IEnumerable<T> GetAll(string? includeProperties=null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeProperties=null)
         {
             IQueryable<T> query = dbSet;
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
+            
             
             if(!string.IsNullOrEmpty(includeProperties))
             {
