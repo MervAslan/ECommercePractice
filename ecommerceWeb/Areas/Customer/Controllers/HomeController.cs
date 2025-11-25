@@ -47,17 +47,16 @@ namespace ecommerceWeb.Areas.Customer.Controllers
             if(cartFromDb == null)
             {
                 cartFromDb.Count+= shoppingCart.Count;
-                _unitOfWork.ShoppingCart.Update(cartFromDb);
-            }
+                _unitOfWork.ShoppingCart.Update(cartFromDb); // update metodunu çaðýrmasak bile efcore change tracking(deðiþiklik takibi)
+            }                                                // yaptýðýndan dolayý, bir veriyi hafýzada deðiþtirdiðimiz an efcore bunu fark eder ve savechanges dediðimizde veritabanýnda günceller 
             else
             {
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
             }
-
-
-               
-           _unitOfWork.Save();
-           return RedirectToAction(nameof(Index)); // ilerde indexin adýný deðiþirse diye nameof kullanýyoruz böylece hata yapma olasýlýðýmýz azalýr
+           
+            _unitOfWork.Save();
+            TempData["success"] = "Cart updated successfully";
+            return RedirectToAction(nameof(Index)); // ilerde indexin adýný deðiþirse diye nameof kullanýyoruz böylece hata yapma olasýlýðýmýz azalýr
 
         }
         public IActionResult Privacy()

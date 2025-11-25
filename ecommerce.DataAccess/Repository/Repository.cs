@@ -1,7 +1,9 @@
 ﻿using ecommerce.DataAccess.Data;
 using ecommerce.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ecommerce.DataAccess.Repository
 {
@@ -21,9 +23,17 @@ namespace ecommerce.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null) // Get(x=> x.Id == id) istediğimiz şeye göre filtreleme yapabiliriz(id,name)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false) // Get(x=> x.Id == id) istediğimiz şeye göre filtreleme yapabiliriz(id,name)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query= dbSet;
+               
+            }else
+            {
+                query = dbSet.AsNoTracking();
+            }
             query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperties))
             {
@@ -32,7 +42,9 @@ namespace ecommerce.DataAccess.Repository
                     query = query.Include(includeProp);
                 }
             }
+            
             return query.FirstOrDefault();
+
         }
 
         public IEnumerable<T> GetAll(string? includeProperties=null)
