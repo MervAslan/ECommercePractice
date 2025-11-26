@@ -44,7 +44,7 @@ namespace ecommerceWeb.Areas.Customer.Controllers
            shoppingCart.ApplicationUserId = userId;                               // kullanýcý giriþ yapmadýysa [Authorize] attribute u sayesinde otomatik olarak login ekranýna yönlendirir
 
             ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == shoppingCart.ProductId);
-            if(cartFromDb == null)
+            if(cartFromDb != null)
             {
                 cartFromDb.Count+= shoppingCart.Count;
                 _unitOfWork.ShoppingCart.Update(cartFromDb); // update metodunu çaðýrmasak bile efcore change tracking(deðiþiklik takibi)
@@ -55,7 +55,7 @@ namespace ecommerceWeb.Areas.Customer.Controllers
             }
            
             _unitOfWork.Save();
-            TempData["success"] = "Cart updated successfully";
+            TempData["success"] = "Cart Added successfully";
             return RedirectToAction(nameof(Index)); // ilerde indexin adýný deðiþirse diye nameof kullanýyoruz böylece hata yapma olasýlýðýmýz azalýr
 
         }
@@ -63,7 +63,7 @@ namespace ecommerceWeb.Areas.Customer.Controllers
         {
             return View();
         }
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
