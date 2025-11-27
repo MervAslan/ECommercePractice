@@ -103,8 +103,16 @@ namespace ecommerceWeb.Areas.Customer.Controllers
                 _unitOfWork.OrderDetail.Add(orderDetail);
                 _unitOfWork.Save();
             }
+            if (ShoppingCartVM.OrderHeader.ApplicationUser.CompanyId.GetValueOrDefault() == 0) 
+            {
+                //bireysel müşteri-stripe logic kısmı
+            }
 
-            return View(ShoppingCartVM);
+            return RedirectToAction(nameof(OrderConfirmation), new {id=ShoppingCartVM.OrderHeader.OrderHeaderId});
+        }
+        public IActionResult OrderConfirmation(int id)
+        {
+            return View(id);
         }
         private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
         {
