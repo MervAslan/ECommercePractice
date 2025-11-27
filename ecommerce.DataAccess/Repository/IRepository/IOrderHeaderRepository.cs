@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ecommerce.DataAccess.Repository.IRepository
 {
-    public interface IOrderHeaderRepository : IRepository<OrderDetail>
+    public interface IOrderHeaderRepository : IRepository<OrderHeader>
     {
-        void Update(OrderDetail obj);
+        void Update(OrderHeader obj);
         
     }
 }
