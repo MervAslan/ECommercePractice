@@ -71,7 +71,7 @@ namespace ecommerceWeb.Areas.Customer.Controllers
 
             ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId=userId;
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+            
 
 
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
@@ -80,8 +80,9 @@ namespace ecommerceWeb.Areas.Customer.Controllers
                 ShoppingCartVM.OrderHeader.OrderTotal += cart.Price * cart.Count;
             }
            
+            var applicationUser = _unitOfWork.ApplicationUser.Get(u=>u.Id==userId);
 
-            if (ShoppingCartVM.OrderHeader.ApplicationUser.CompanyId.GetValueOrDefault() == 0) //kullanıcının bağlı olduğu şirket ıdsi yoksa bu kişi bireysel müşteri
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0) //kullanıcının bağlı olduğu şirket ıdsi yoksa bu kişi bireysel müşteri
             {
                 ShoppingCartVM.OrderHeader.PaymentStatus=SD.PaymentStatusPending;
                 ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
@@ -105,7 +106,7 @@ namespace ecommerceWeb.Areas.Customer.Controllers
                 _unitOfWork.OrderDetail.Add(orderDetail);
                 _unitOfWork.Save();
             }
-            if (ShoppingCartVM.OrderHeader.ApplicationUser.CompanyId.GetValueOrDefault() == 0) 
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0) 
             {
                 //bireysel müşteri-stripe logic kısmı
             }
