@@ -71,13 +71,15 @@ namespace ecommerceWeb.Areas.Customer.Controllers
 
             ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId=userId;
-                
-            
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 cart.Price = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += cart.Price * cart.Count;
             }
+           
 
             if (ShoppingCartVM.OrderHeader.ApplicationUser.CompanyId.GetValueOrDefault() == 0) //kullanıcının bağlı olduğu şirket ıdsi yoksa bu kişi bireysel müşteri
             {
@@ -110,6 +112,7 @@ namespace ecommerceWeb.Areas.Customer.Controllers
 
             return RedirectToAction(nameof(OrderConfirmation), new {id=ShoppingCartVM.OrderHeader.OrderHeaderId});
         }
+        
         public IActionResult OrderConfirmation(int id)
         {
             return View(id);
