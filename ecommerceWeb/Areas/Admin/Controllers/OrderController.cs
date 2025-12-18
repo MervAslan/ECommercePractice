@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerceWeb.Areas.Admin.Controllers
 {
+    [Area("admin")]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -22,7 +23,7 @@ namespace ecommerceWeb.Areas.Admin.Controllers
         public IActionResult GetAll()
         {
             List<OrderHeader> objOrderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
-            return Json(new { data = objOrderHeaders });
+            return Json(new { data = objOrderHeaders});
         }
         
         #endregion
