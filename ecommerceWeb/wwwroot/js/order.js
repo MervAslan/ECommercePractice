@@ -2,12 +2,31 @@
 
 
 $(document).ready(function () {
-    loadDataTable();
+    var url = window.location.search; //tarayıcıdaki urlin query string kısmını alır 
+    if (url.includes("inprocess")) {
+        loadDataTable("inprocess");
+    } else {
+        if (url.includes("completed")) {
+            loadDataTable("completed");
+        } else {
+            if (url.includes("pending")) {
+                loadDataTable("pending");
+            } else {
+                if (url.includes("approved")) {
+                    loadDataTable("approved");
+                } else {
+                    loadDataTable("all")
+                }
+            }
+        }
+
+    }
+    
 });
 
-function loadDataTable() {
+function loadDataTable(status) {
     dataTable = $('#tblData').DataTable({
-        "ajax": { url: '/Admin/Order/GetAll' },
+        "ajax": { url: '/Admin/Order/GetAll?Status=' + status },
         "columns": [
             { data: 'orderHeaderId', width: '15%' },
             { data: 'name', width: '15%' },
@@ -19,7 +38,7 @@ function loadDataTable() {
                 data: 'orderHeaderId',
                 "render": function (data) {
                     return `<div class="w-75 btn-group" role="group">
-                        <a href="/admin/order/datails?orderId=${data}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
+                        <a href="/admin/order/detailsload?orderId=${data}" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></a>
                         
                     
                     </div >`
